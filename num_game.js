@@ -7,6 +7,7 @@ var updateCounter;
 var hiddenNum;
 var triesMessage, hintMessage;
 const MAX_TRIES = 10;
+const MAX_NUMBER = 1000;
 
 button.onclick = function() {
   mainLoop();
@@ -37,6 +38,35 @@ function mainLoop() {
   }
 }
 
+//check incorrect input
+function checkInput(inputStr) {
+  console.log("check: " + inputStr);
+  var i = inputStr.length;
+  if(i <= 0) throw "Empty field";
+
+  while(i--) {
+    var symbol = inputStr[i];
+    if(isNaN(parseInt(symbol))) {
+      throw "Not a number: " + symbol;
+    }
+  }
+}
+
+function compareGuess(val) {
+  if (hiddenNum > val) {
+    hintMessage = "My num is bigger, than " + val;
+  } else if (hiddenNum < val) {
+    hintMessage = "My num is less, than " + val;
+  }
+}
+
+function hasMoreTries() {
+  var left = MAX_TRIES - updateCounter();
+  counterField.innerHTML = left;
+  triesMessage = "you have: " + left + "tries left";
+  return (left > 0);
+}
+
 function reset() {
   updateCounter = function() {
     var triesCounter = 0;
@@ -52,43 +82,15 @@ function reset() {
     hintMessage = "";
 
     //roll the number
-    hiddenNum = 1 + Math.floor(Math.random() * 100);
+    hiddenNum = 1 + Math.floor(Math.random() * MAX_NUMBER);
     console.log("hidden number: " + hiddenNum);
 }
 
 function renderMessages() {
-  logField.innerHTML += "<p>"+hintMessage+"</p>";
+  logField.innerHTML = "<p>"+hintMessage+"</p>" + logField.innerHTML;
 }
 
 function gameOver() {
-  alert("game over, the number was: "+hiddenNum);
+  alert("Game Over, the number was: "+hiddenNum);
   reset();
-}
-
-function hasMoreTries() {
-  var left = MAX_TRIES - updateCounter();
-  counterField.innerHTML = left;
-  triesMessage = "you have: " + left + "tries left";
-  return (left > 0);
-}
-
-function compareGuess(val) {
-  if (hiddenNum > val) {
-    hintMessage = "My num is bigger, than " + val;
-  } else if (hiddenNum < val) {
-    hintMessage = "My num is less, than " + val;
-  }
-}
-
-function checkInput(inputStr) {
-  console.log("check: " + inputStr);
-  var i = inputStr.length;
-  if(i <= 0) throw "Empty field";
-
-  while(i--) {
-    var symbol = inputStr[i];
-    if(isNaN(parseInt(symbol))) {
-      throw "Not a number: "+symbol;
-    }
-  }
 }
