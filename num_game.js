@@ -13,7 +13,6 @@ button.onclick = function() {
   mainLoop();
   inputField.value = "";
 };
-
 reset();
 
 function mainLoop() {
@@ -22,16 +21,11 @@ function mainLoop() {
     compareGuess(inputField.value);
 
     if(inputField.value != hiddenNum) {
-        if(hasMoreTries()) {
-          renderMessages();
-        } else {
-          gameOver();
-        }
-        //WON
-      } else {
-        alert("You guess the num! "+hiddenNum);
+      hasMoreTries() ? renderMessages() : gameOver();
+    } else {
+        alert("You guess the num! "+ hiddenNum);
         reset();
-      }
+    }
 
   } catch(e) {
     alert("error: " + e);
@@ -47,7 +41,7 @@ function checkInput(inputStr) {
   while(i--) {
     var symbol = inputStr[i];
     if(isNaN(parseInt(symbol))) {
-      throw "Not a number: " + symbol;
+      throw "Not a number: \"" + symbol +"\"";
     }
   }
 }
